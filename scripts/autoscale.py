@@ -226,7 +226,7 @@ def _main():
                 mark_instance_unhealthy(instance_id)
         if instance_id in worker_by_instance_id:
             worker = worker_by_instance_id[instance_id]
-            if not worker['queues'] and worker['active_tasks'] == 0:
+            if not worker['queues'] and worker['active'] == 0:
                 terminate_instance(instance_id)
                 terminated_instances.add(instance_id)
 
