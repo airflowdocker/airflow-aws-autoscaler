@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=0.1.1
+VERSION=0.1.2
 
 docker push airflowdocker/aws-autoscaler:VERSION
 docker push airflowdocker/aws-autoscaler
