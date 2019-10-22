@@ -1,0 +1,78 @@
+version: 2
+
+test-tox-env: &test-tox-env
+  run:
+    name: Run Tests
+    command: |
+      pip install tox
+      tox
+
+setup-env: &setup-env
+  run:
+    name: Setup Environment
+    command: |
+      echo "We good".
+
+jobs:
+
+  prepare-release:
+    docker:
+      - image: circleci/python:3.7.2
+    steps:
+      - checkout
+      - run:
+          command: |
+            python -m venv .venv
+            source .venv/bin/activate
+            pip install releasely
+            git config --global user.email "huntcsg@gmail.com"
+            git config --global user.name "airflow-aws-autoscaler-bot"
+            releasely prepare-release
+
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          command: ./bin/build-images
+
+  docker:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          command: ./bin/build-images
+      - run:
+          command: ./bin/tag-images
+      - run:
+          command: ./bin/release-docker
+
+workflows:
+  version: 2
+  continuous-delivery:
+    jobs:
+      - build
+      - prepare-release:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - /^master$/
+                - /^release-v[0-9]+$/
+
+      - docker:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - /^release-v[0-9]+\.[0-9]+$/
+
+experimental:
+  notify:
+    branches:
+      only:
+        - master
+        - /^release-v[0-9]+$/
+        - /^release-v[0-9]+\.[0-9]+$/
