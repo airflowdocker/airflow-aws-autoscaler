@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-VERSION=0.1.0
+VERSION=0.1.1
 
 docker tag airflowdocker/aws-autoscaler airflowdocker/aws-autoscaler:VERSION
