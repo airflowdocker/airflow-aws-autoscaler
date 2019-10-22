@@ -1,3 +1,15 @@
+.. _v0.1.3:
+
+-------------------
+v0.1.3 - 2019-10-22
+-------------------
+
+* Fixed worker active tasks processing.
+
+Authors:
+
+* Hunter Senft-Grupp
+
 .. _v0.1.2:
 
 -------------------
